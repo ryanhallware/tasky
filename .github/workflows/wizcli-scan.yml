@@ -1,0 +1,41 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Scan Dockerfile
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  download-and-scan-dockerfile:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        with:
+          context: .
+          push: true
+          tags: 'tasky:test'
+      
+      - name: Download Wizcli
+        run: |
+          curl -Lo wizcli https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64 && chmod +x wizcli
+
+      - name: Wizcli Authenticate
+        run: |
+          ./wizcli auth --id ${{ secrets.CLIENT_ID }} --secret ${{ secrets.CLIENT_SECRET }}
+
+      - name: Wizcli Scan Dockerfile
+        run: |
+          wizcli docker scan --dockerfile Dockerfile --image tasky:test
