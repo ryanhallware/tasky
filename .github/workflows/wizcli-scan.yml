@@ -33,9 +33,8 @@ jobs:
 
       - name: Wizcli Authenticate
         run: |
-          ./wizcli auth --id '${{ secrets.CLIENT_ID }}' --secret '${{ secrets.CLIENT_SECRET }}'
+          ./wizcli auth --id ${{ secrets.CLIENT_ID }} --secret ${{ secrets.CLIENT_SECRET }}
 
       - name: Wizcli Scan Dockerfile
         run: |
           wizcli docker scan --dockerfile Dockerfile --image tasky:test
-          
