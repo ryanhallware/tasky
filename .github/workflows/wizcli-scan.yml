@@ -37,7 +37,7 @@ jobs:
 
       - name: Wizcli Authenticate
         run: |
-          ./wizcli auth --id '$(CLIENT_ID)' --secret '$(CLIENT_SECRET)'
+          ./wizcli auth --id $(CLIENT_ID) --secret $(CLIENT_SECRET)
 
       - name: Wizcli Scan Dockerfile
         run: |
