@@ -18,11 +18,6 @@ jobs:
       packages: write
 
     steps:
-      - name: Hello, World
-        continue-on-error: true
-        run: |
-          echo "Is this thing on?" >> $GITHUB_STEP_SUMMARY
-      
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -32,23 +27,26 @@ jobs:
           context: .
           tags: 'tasky:test'
       
-      - name: Wizcli Download, Auth, & Scan
+      - name: Wizcli Download
         continue-on-error: true
         run: |
           curl -Lo wizcli https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64 && chmod +x wizcli
-          ./wizcli auth --id ${{ secrets.CLIENT_ID }} --secret ${{ secrets.CLIENT_SECRET }}
-          ./wizcli docker scan --dockerfile Dockerfile --image tasky:test --format json > output.json
-          result=$(echo "Scan Result:" $(cat output.json | jq .status.verdict))
-          echo $result >> $GITHUB_STEP_SUMMARY
-          link=$(echo "Report Link:" $(cat output.json | jq .reportUrl))
-          echo $link >> $GITHUB_STEP_SUMMARY
 
-      - name: Goodbye, World
+      - name: Wizcli Auth
         continue-on-error: true
         run: |
-          cat output.json | jq .status.verdict
+          ./wizcli auth --id ${{ secrets.CLIENT_ID }} --secret ${{ secrets.CLIENT_SECRET }}
+
+
+      - name: Wizcli Scan
+        continue-on-error: true
+        run: |
+          ./wizcli docker scan --dockerfile Dockerfile --image tasky:test --format json > output.json
+
+      - name: Generate Summary
+        continue-on-error: true
+        run: |
           result=$(echo "Scan Result:" $(cat output.json | jq .status.verdict))
           echo $result >> $GITHUB_STEP_SUMMARY
           link=$(echo "Report Link:" $(cat output.json | jq .reportUrl))
           echo $link >> $GITHUB_STEP_SUMMARY
-          echo "Goodbye" >> $GITHUB_STEP_SUMMARY
