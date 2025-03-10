@@ -10,10 +10,6 @@ on:
     branches:
       - '**'
 
-env:
-  CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-  CLIENT_ID: ${{ secrets.CLIENT_ID }}
-
 jobs:
   download-and-scan-dockerfile:
     runs-on: ubuntu-latest
@@ -37,7 +33,7 @@ jobs:
 
       - name: Wizcli Authenticate
         run: |
-          ./wizcli auth --id $CLIENT_ID --secret $CLIENT_SECRET
+          ./wizcli auth --id ${{ secrets.CLIENT_ID }} --secret ${{ secrets.CLIENT_SECRET }}
 
       - name: Wizcli Scan Dockerfile
         run: |
