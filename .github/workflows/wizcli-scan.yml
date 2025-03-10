@@ -37,5 +37,5 @@ jobs:
       - name: Results
         continue-on-error: true
         run: |
-          echo "Scan Result:" $(cat output.json | jq .status.verdict) >> $GITHUB_SUMMARY
-          echo "Report Link:" $(cat output.json | jq .reportUrl) >> $GITHUB_SUMMARY
+          echo "Scan Result:" $(cat output.json | jq .status.verdict) >> "$GITHUB_SUMMARY"
+          echo "Report Link:" $(cat output.json | jq .reportUrl) >> "$GITHUB_SUMMARY"
