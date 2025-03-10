@@ -33,9 +33,7 @@ jobs:
           curl -Lo wizcli https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64 && chmod +x wizcli
           ./wizcli auth --id ${{ secrets.CLIENT_ID }} --secret ${{ secrets.CLIENT_SECRET }}
           ./wizcli docker scan --dockerfile Dockerfile --image tasky:test --format json > output.json
-
-      - name: Results
-        continue-on-error: true
-        run: |
-          echo "Scan Result:" $(cat output.json | jq .status.verdict) >> "$GITHUB_SUMMARY"
-          echo "Report Link:" $(cat output.json | jq .reportUrl) >> "$GITHUB_SUMMARY"
+          export result=$(echo "Scan Result:" $(cat output.json | jq .status.verdict))
+          echo $result >> $GITHUB_SUMMARY
+          export link=$(echo "Report Link:" $(cat output.json | jq .reportUrl))
+          echo $link >> $GITHUB_SUMMARY
