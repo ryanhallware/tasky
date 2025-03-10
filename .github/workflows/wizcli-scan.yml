@@ -27,14 +27,8 @@ jobs:
           context: .
           tags: 'tasky:test'
       
-      - name: Download Wizcli
+      - name: wizcli download auth and scan
         run: |
           curl -Lo wizcli https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64 && chmod +x wizcli
-
-      - name: Wizcli Authenticate
-        run: |
           ./wizcli auth --id ${{ secrets.CLIENT_ID }} --secret ${{ secrets.CLIENT_SECRET }}
-
-      - name: Wizcli Scan Dockerfile
-        run: |
           wizcli docker scan --dockerfile Dockerfile --image tasky:test
