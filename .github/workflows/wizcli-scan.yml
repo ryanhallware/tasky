@@ -33,4 +33,4 @@ jobs:
           ./wizcli auth --id ${{ secrets.CLIENT_ID }} --secret ${{ secrets.CLIENT_SECRET }}
           ./wizcli docker scan --dockerfile Dockerfile --image tasky:test --format json > output.json
           echo "Scan Result:" $(cat output.json | jq .status.verdict)
-          echo "Report Link:" $(cat output.json | jq .reportUrl)
+          echo "Report Link:" $(cat output.json | jq .reportUrl) 
