@@ -39,7 +39,7 @@ jobs:
           ./wizcli auth --id ${{ secrets.CLIENT_ID }} --secret ${{ secrets.CLIENT_SECRET }}
           ./wizcli docker scan --dockerfile Dockerfile --image tasky:test --format json > output.json
           echo "Is this thing on?" >> $GITHUB_STEP_SUMMARY
-          export result=$(echo "Scan Result:" $(cat output.json | jq .status.verdict))
+          result=$(echo "Scan Result:" $(cat output.json | jq .status.verdict))
           echo $result >> $GITHUB_STEP_SUMMARY
-          export link=$(echo "Report Link:" $(cat output.json | jq .reportUrl))
+          link=$(echo "Report Link:" $(cat output.json | jq .reportUrl))
           echo $link >> $GITHUB_STEP_SUMMARY
