@@ -31,4 +31,4 @@ jobs:
         run: |
           curl -Lo wizcli https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64 && chmod +x wizcli
           ./wizcli auth --id ${{ secrets.CLIENT_ID }} --secret ${{ secrets.CLIENT_SECRET }}
-          wizcli docker scan --dockerfile Dockerfile --image tasky:test
+          ./wizcli docker scan --dockerfile Dockerfile --image tasky:test
