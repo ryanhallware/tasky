@@ -28,25 +28,32 @@ jobs:
           tags: 'tasky:test'
       
       - name: Wizcli Download
-        continue-on-error: true
         run: |
           curl -Lo wizcli https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64 && chmod +x wizcli
 
       - name: Wizcli Auth
-        continue-on-error: true
         run: |
           ./wizcli auth --id ${{ secrets.CLIENT_ID }} --secret ${{ secrets.CLIENT_SECRET }}
 
-
       - name: Wizcli Scan
+        id: wizcli-scan
         continue-on-error: true
         run: |
           ./wizcli docker scan --dockerfile Dockerfile --image tasky:test --format json > output.json
 
-      - name: Generate Summary
-        continue-on-error: true
+      - name: Wizcli Scan Summary
+        if: ${{ steps.wizcli-scan.conclusion == 'failure'}}
         run: |
-          result=$(echo "Scan Result:" $(cat output.json | jq .status.verdict))
+          result=$(echo "Scan Result: :x:" $(cat output.json | jq .status.verdict))
+          echo $result >> $GITHUB_STEP_SUMMARY
+          link=$(echo "Report Link:" $(cat output.json | jq .reportUrl))
+          echo $link >> $GITHUB_STEP_SUMMARY       
+
+      - name: Wizcli Scan Summary
+        if: ${{ steps.wizcli-scan.conclusion == 'success'}}
+        run: |
+          result=$(echo "Scan Result: :white_check_mark:" $(cat output.json | jq .status.verdict))
           echo $result >> $GITHUB_STEP_SUMMARY
           link=$(echo "Report Link:" $(cat output.json | jq .reportUrl))
           echo $link >> $GITHUB_STEP_SUMMARY
+      
