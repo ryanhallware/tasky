@@ -42,18 +42,9 @@ jobs:
           ./wizcli docker scan --dockerfile Dockerfile --image tasky:test --format json > output.json
 
       - name: Wizcli Scan Summary
-        if: ${{ steps.wizcli-scan.conclusion == 'failure'}}
         run: |
           result=$(echo "Scan Result: :x:" $(cat output.json | jq .status.verdict))
           echo $result >> $GITHUB_STEP_SUMMARY
           link=$(echo "Report Link:" $(cat output.json | jq .reportUrl))
           echo $link >> $GITHUB_STEP_SUMMARY       
-
-      - name: Wizcli Scan Summary
-        if: ${{ steps.wizcli-scan.conclusion == 'success'}}
-        run: |
-          result=$(echo "Scan Result: :white_check_mark:" $(cat output.json | jq .status.verdict))
-          echo $result >> $GITHUB_STEP_SUMMARY
-          link=$(echo "Report Link:" $(cat output.json | jq .reportUrl))
-          echo $link >> $GITHUB_STEP_SUMMARY
       
