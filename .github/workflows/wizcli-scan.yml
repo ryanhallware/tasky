@@ -18,6 +18,11 @@ jobs:
       packages: write
 
     steps:
+      - name: Hello, World
+        continue-on-error: true
+        run: |
+          echo "Is this thing on?" >> $GITHUB_STEP_SUMMARY
+      
       - name: Checkout repository
         uses: actions/checkout@v3
 
