@@ -1,5 +1,5 @@
 # Use an official older Ubuntu Image, so we have a failure
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 
 # Set the working directory in the container, for no reason
 WORKDIR /app
