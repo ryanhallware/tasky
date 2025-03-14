@@ -11,7 +11,7 @@ on:
       - '**'
 
 jobs:
-  download-and-scan-dockerfile:
+  Scan-Dockerfile-with-WizCLI:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -40,7 +40,7 @@ jobs:
         run: |
           ./wizcli docker scan --dockerfile Dockerfile --image ubuntu:old --format json > output.json   
 
-      - name: Wizcli Scan Summary
+      - name: Wizcli Scan Failure Summary
         if: ${{ failure() }}
         run: |
           result=$(echo 'Scan Result: :x:' $(cat output.json | jq .status.verdict))
@@ -48,7 +48,7 @@ jobs:
           link=$(echo 'Report Link:' $(cat output.json | jq .reportUrl))
           echo $link >> $GITHUB_STEP_SUMMARY
 
-      - name: Wizcli Scan Summary
+      - name: Wizcli Scan Success Summary
         run: |
           result=$(echo 'Scan Result: :white_check_mark:' $(cat output.json | jq .status.verdict))
           echo $result >> $GITHUB_STEP_SUMMARY
