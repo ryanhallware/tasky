@@ -1,18 +1,14 @@
-# Building the binary of the App
-FROM golang:1.19 AS build
+# Use an official older Ubuntu Image, so we have a failure
+FROM ubuntu:18.04
 
-WORKDIR /go/src/tasky
-COPY . .
-RUN go mod download
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /go/src/tasky/tasky
-
-
-FROM alpine:3.17.0 as release
-
+# Set the working directory in the container, for no reason
 WORKDIR /app
-COPY --from=build  /go/src/tasky/tasky .
-COPY --from=build  /go/src/tasky/assets ./assets
-EXPOSE 8080
-ENTRYPOINT ["/app/tasky"]
 
+# Copy the current directory contents into the container at /app
+COPY . /app
 
+# Does a simple thing
+RUN echo "Hello, world!"
+
+# Go to sleep
+CMD ["sleep 3600"]

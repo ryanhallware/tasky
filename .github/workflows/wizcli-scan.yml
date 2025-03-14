@@ -39,12 +39,11 @@ jobs:
         id: wizcli-scan
         continue-on-error: true
         run: |
-          ./wizcli docker scan --dockerfile Dockerfile --image tasky:test --format json > output.json
+          ./wizcli docker scan --dockerfile Dockerfile --image tasky:test --format json > output.json   
 
       - name: Wizcli Scan Summary
         run: |
-          result=$(echo "Scan Result:" $(cat output.json | jq .status.verdict))
+          result=$(echo 'Scan Result:' $(cat output.json | jq .status.verdict))
           echo $result >> $GITHUB_STEP_SUMMARY
-          link=$(echo "Report Link:" $(cat output.json | jq .reportUrl))
-          echo $link >> $GITHUB_STEP_SUMMARY       
-      
+          link=$(echo 'Report Link:' $(cat output.json | jq .reportUrl))
+          echo $link >> $GITHUB_STEP_SUMMARY
